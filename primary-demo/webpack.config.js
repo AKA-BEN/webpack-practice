@@ -1,52 +1,87 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const path = require('path')
+const devServerConfig = require('./dev-server-config')
+
+function resolve (dir) {
+  return path.join(__dirname, dir)
+}
 
 module.exports = {
+  devServer: devServerConfig,
+  // 模块入口
   entry: {
-    main: './src/script/main.js',
-    a: './src/script/a.js',
-    b: './src/script/b.js'
+    main: resolve('src/script/main.js'),
+    demo1: resolve('src/script/demo1.js'),
+    demo2: resolve('src/script/demo2.js')
   },
+  // 文件出口
   output: {
     path: __dirname + '/dist',
     filename: 'js/[name]-[chunkhash].js',
     publicPath: './'
   },
+  resolve:{
+    // 配置别名映射成一个新的导入路径
+    alias:{
+      css: resolve('src/style'),
+      tpl: resolve('src/tpl')
+    },
+    // 导入文件无扩展名 自动匹配上扩展名
+    extensions: ['.js', '.html', '.ejs'],
+    // 依赖模块在指定目录下 优先查找
+    modules: [
+      path.resolve(__dirname, 'node_modules'),
+    ]
+  },
+  // 扩展插件
   plugins: [
+    // html模板配置（每个实例生成一个文件）
     new HtmlWebpackPlugin({
-      filename: 'a.html',
+      filename: 'demo1.html',
       template: 'index.html',
       inject: false,
-      title: 'this is a.html',
+      title: 'this is demo1.html',
+      // 文件压缩
       minify: {
         removeComments: false
       },
-      chunks: ['main', 'a']
+      // 插入模板的代码模块
+      chunks: ['main', 'demo1']
     }),
     new HtmlWebpackPlugin({
-      filename: 'b.html',
+      filename: 'demo2.html',
       template: 'index.html',
       inject: false,
-      title: 'this is b.html',
+      title: 'this is demo2.html',
       minify: {
         removeComments: false
       },
-      excludeChunks: ['a']
+      // 排除插入模板的代码模块
+      excludeChunks: ['demo1']
     }),
+    // 将引入的css生成单独的css文件
+    new ExtractTextPlugin('css/common.css'),
+    // 在打包前清除之前的文件
     new CleanWebpackPlugin(['dist/*'])
   ],
+  // 加载转换器
   module: {
     rules: [
       {
+        // 匹配需要转换的文件名正则
         test: /\.js$/,
+        // 使用loader转换文件内容
         use: 'babel-loader',
-        include: path.resolve(__dirname, 'src'),
-        exclude: path.resolve(__dirname, 'node_modules')
+        // 指定转换src文件夹下的文件
+        include: resolve('src'),
+        // 排除转换node_modules文件夹下的文件
+        exclude: resolve('node_modules')
       },
       {
         test: /\.html$/,
-        include: path.resolve(__dirname, 'src/tpl'),
+        include: resolve('src/tpl'),
         use: [ {
           loader: 'html-loader',
           options: {
@@ -56,7 +91,7 @@ module.exports = {
       },
       {
         test: /\.ejs$/,
-        include: path.resolve(__dirname, 'src/tpl'),
+        include: resolve('src/tpl'),
         use: 'ejs-loader'
       },
       {
@@ -74,23 +109,25 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          { loader: 'css-loader', options: { importLoaders: 1 } },
-          { loader: 'postcss-loader', options: {
-            ident: 'postcss',
-            plugins: (loader) => [
-              require('autoprefixer')()
-            ]
-          } }
-        ]
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            { loader: 'css-loader', options: { importLoaders: 1 } },
+            { loader: 'postcss-loader', options: {
+              ident: 'postcss',
+              plugins: (loader) => [
+                require('autoprefixer')()
+              ]
+            } }
+          ]
+        })
       },
       {
         test: /\.less$/,
         use: [
           'style-loader',
           'css-loader',
-          { loader: 'postcss-loader', 
+          { loader: 'postcss-loader',
             options: {
               ident: 'postcss',
               plugins: [

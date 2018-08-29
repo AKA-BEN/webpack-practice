@@ -1,9 +1,10 @@
 import {counts} from './counts'
-import tpl from '../tpl/a.html'
-import '../style/common.css'
-import '../style/a.less'
+import tpl from 'tpl/a'
+import 'css/common.css'
+import 'css/common2.css'
+import 'css/a.less'
 
-function a() {
+function getElP() {
   const num1 = 10;
   const num2 = 8;
   let elP = document.createElement('p');
@@ -16,4 +17,4 @@ function a() {
 
 let app = document.getElementById('app');
 app.innerHTML = tpl
-app.appendChild(a())
+app.appendChild(getElP())

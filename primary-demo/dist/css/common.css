@@ -1,0 +1,12 @@
+html, body{
+  padding: 0;
+  margin: 0;
+}
+ul, li{
+  list-style: none;
+}
+.flex-d{
+  display: flex;
+}.the-shadow{
+  box-shadow: 1px 1px 3px #aaa;
+}

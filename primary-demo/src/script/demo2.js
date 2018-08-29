@@ -1,11 +1,11 @@
-import tpl from '../tpl/b.ejs'
+import tpl from 'tpl/b'
 
 let app = document.getElementById('app');
 let count = 3
 let interval = setInterval(() => {
   if (count === 0) {
     app.innerHTML = tpl({
-      title: 'ejs 模板列表',
+      title: 'ejs 模板列表.',
       arr: ['aape', 'nike', 'vans', 'converse']
     })
     clearInterval(interval)
