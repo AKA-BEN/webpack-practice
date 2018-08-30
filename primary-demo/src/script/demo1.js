@@ -5,8 +5,8 @@ import 'css/common2.css'
 import 'css/a.less'
 
 function getElP() {
-  const num1 = 10;
-  const num2 = 8;
+  const num1 = 66;
+  const num2 = 38;
   let elP = document.createElement('p');
   let elTxt = document.createTextNode(
     num1 + '+' + num2 + '=' + counts(num1, num2)
@@ -18,3 +18,4 @@ function getElP() {
 let app = document.getElementById('app');
 app.innerHTML = tpl
 app.appendChild(getElP())
+console.log('compiled');
