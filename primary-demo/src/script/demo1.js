@@ -1,4 +1,5 @@
 import {counts} from './counts'
+import module01 from './module01'
 import tpl from 'tpl/a'
 import 'css/common.css'
 import 'css/common2.css'
@@ -9,7 +10,7 @@ function getElP() {
   const num2 = 38;
   let elP = document.createElement('p');
   let elTxt = document.createTextNode(
-    num1 + '+' + num2 + '=' + counts(num1, num2)
+    module01() + num1 + '+' + num2 + '=' + counts(num1, num2)
   );
   elP.appendChild(elTxt)
   return elP

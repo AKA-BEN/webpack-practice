@@ -2,8 +2,8 @@
 
 ## 目录
 
-* ### [npm script](#npm-scripe)
-* ### [配置文件](#configuration-file)
+* #### [npm script](#npm-scripe)
+* #### [配置文件](#configuration-file)
 
 
 <h2 id="npm-scripe">npm script</h2>

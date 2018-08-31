@@ -104,7 +104,11 @@ module.exports = {
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
-            { loader: 'css-loader', options: { importLoaders: 1 } },
+            { loader: 'css-loader', options: {
+              importLoaders: 1,
+              // 使用 css 的压缩功能
+              minimize: true,
+            } },
             { loader: 'postcss-loader', options: {
               ident: 'postcss',
               plugins: (loader) => [
